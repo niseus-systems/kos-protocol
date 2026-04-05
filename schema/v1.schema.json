@@ -1,0 +1,288 @@
+{                                                                                                                     
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://kosprotocol.dev/v1/schema.json",
+    "title": "KOS Protocol v1.0",                                                                                       
+    "description": "Schema for kos.json — machine-readable, provenance-tracked knowledge about any entity.",
+    "type": "object",                                                                                                   
+    "required": ["$schema", "entity", "knowledge", "meta"],
+    "additionalProperties": false,                                                                                      
+    "properties": {
+      "$schema": {                                                                                                      
+        "type": "string",
+        "format": "uri",                                                                                                
+        "const": "https://kosprotocol.dev/v1/schema.json"
+      },
+      "$profile": {                                                                                                     
+        "type": "string",
+        "format": "uri",                                                                                                
+        "description": "Optional vertical profile URI for domain-specific validation."
+      },                                                                                                                
+      "entity": {
+        "$ref": "#/$defs/Entity"                                                                                        
+      },                                                                                                                
+      "knowledge": {
+        "type": "array",                                                                                                
+        "minItems": 1,
+        "items": {
+          "$ref": "#/$defs/Node"                                                                                        
+        }
+      },                                                                                                                
+      "relations": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/Relation"
+        }                                                                                                               
+      },
+      "meta": {                                                                                                         
+        "$ref": "#/$defs/Meta"
+      }
+    },
+    "$defs": {
+      "Entity": {
+        "type": "object",
+        "required": ["name", "type", "id"],
+        "additionalProperties": false,                                                                                  
+        "properties": {
+          "name": {                                                                                                     
+            "type": "string",
+            "description": "Display name of the entity."
+          },                                                                                                            
+          "type": {
+            "type": "string",                                                                                           
+            "description": "Entity category (Organization, LocalBusiness, Person, Product, etc.)."
+          },                                                                                                            
+          "id": {
+            "type": "string",                                                                                           
+            "pattern": "^kos:[a-z0-9][a-z0-9-]*$|^https?://",
+            "description": "Canonical identifier. Format: kos:{slug} or full URI."                                      
+          },                                                                                                            
+          "url": {                                                                                                      
+            "type": "string",                                                                                           
+            "format": "uri",
+            "description": "Primary web presence."
+          },                                                                                                            
+          "description": {
+            "type": "string",                                                                                           
+            "maxLength": 300,
+            "description": "Brief description of the entity."
+          },
+          "identifiers": {                                                                                              
+            "type": "object",
+            "additionalProperties": {                                                                                   
+              "type": "string"
+            },
+            "description": "External IDs (google_place_id, wikidata, lei, duns, etc.)."                                 
+          }                                                                                                             
+        }                                                                                                               
+      },                                                                                                                
+      "Node": {   
+        "type": "object",
+        "required": ["id", "type", "label", "provenance"],
+        "additionalProperties": false,                                                                                  
+        "properties": {
+          "id": {                                                                                                       
+            "type": "string",
+            "pattern": "^kos:[a-z0-9][a-z0-9-]*$",
+            "description": "Unique node identifier within this document."                                               
+          },                                                                                                            
+          "type": {                                                                                                     
+            "type": "string",                                                                                           
+            "description": "Node type from core taxonomy or namespaced extension."
+          },                                                                                                            
+          "label": {
+            "type": "string",                                                                                           
+            "description": "Human-readable name."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000,                                                                                          
+            "description": "What this node represents."
+          },                                                                                                            
+          "provenance": {
+            "$ref": "#/$defs/Provenance"
+          },
+          "properties": {                                                                                               
+            "type": "object",
+            "additionalProperties": true,                                                                               
+            "description": "Type-specific structured data."
+          },
+          "relations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/InlineRelation"                                                                          
+            },
+            "description": "Inline relations from this node."                                                           
+          },                                                                                                            
+          "tags": {
+            "type": "array",                                                                                            
+            "items": {
+              "type": "string"
+            },
+            "description": "Freeform classification labels."
+          },                                                                                                            
+          "schema_org": {
+            "type": "string",                                                                                           
+            "format": "uri",                                                                                            
+            "description": "Equivalent Schema.org type URI."
+          }                                                                                                             
+        }         
+      },                                                                                                                
+      "Provenance": {
+        "type": "object",                                                                                               
+        "required": ["created", "source"],
+        "additionalProperties": false,
+        "properties": {
+          "created": {                                                                                                  
+            "type": "string",
+            "description": "ISO 8601 date when node was first created."                                                 
+          },      
+          "modified": {
+            "type": "string",                                                                                           
+            "description": "ISO 8601 date when content was last changed."
+          },                                                                                                            
+          "verified": {
+            "type": "string",
+            "description": "ISO 8601 date when a human last confirmed accuracy."                                        
+          },
+          "source": {                                                                                                   
+            "type": "string",
+            "description": "Who provided this data (owner, employee, public-record, third-party, automated, inferred)." 
+          },                                                                                                            
+          "method": {                                                                                                   
+            "type": "string",                                                                                           
+            "description": "How it was verified (manual-review, document-check, api-sync, site-audit, self-reported)."
+          },                                                                                                            
+          "confidence": {
+            "type": "number",                                                                                           
+            "minimum": 0,
+            "maximum": 1,                                                                                               
+            "description": "Publisher's self-assessed confidence."
+          },                                                                                                            
+          "decay_rate": {
+            "type": "number",                                                                                           
+            "minimum": 0,
+            "description": "Custom decay rate override (lambda). Overrides the type default."
+          }                                                                                                             
+        }                                                                                                               
+      },                                                                                                                
+      "Relation": {                                                                                                     
+        "type": "object",
+        "required": ["source", "target", "type"],
+        "additionalProperties": false,
+        "properties": {                                                                                                 
+          "source": {
+            "type": "string",                                                                                           
+            "description": "Origin node ID."
+          },
+          "target": {
+            "type": "string",
+            "description": "Destination node ID or external URI (format: {kos.json URL}#{node-id})."                    
+          },                                                                                                            
+          "type": {                                                                                                     
+            "type": "string",                                                                                           
+            "enum": ["dep", "ref", "rel"],                                                                              
+            "description": "dep = depends on, ref = references, rel = semantically related."
+          },                                                                                                            
+          "label": {
+            "type": "string",                                                                                           
+            "description": "Human-readable description of the relationship."
+          },                                                                                                            
+          "weight": {
+            "type": "number",                                                                                           
+            "minimum": 0,
+            "maximum": 1,
+            "default": 1.0,
+            "description": "Strength of relationship."                                                                  
+          }
+        }                                                                                                               
+      },          
+      "InlineRelation": {
+        "type": "object",
+        "required": ["target", "type"],
+        "additionalProperties": false,                                                                                  
+        "properties": {
+          "target": {                                                                                                   
+            "type": "string",
+            "description": "Destination node ID or external URI."
+          },
+          "type": {
+            "type": "string",
+            "enum": ["dep", "ref", "rel"],                                                                              
+            "description": "dep = depends on, ref = references, rel = semantically related."
+          },                                                                                                            
+          "label": {
+            "type": "string",
+            "description": "Human-readable description."
+          },                                                                                                            
+          "weight": {
+            "type": "number",                                                                                           
+            "minimum": 0,
+            "maximum": 1,
+            "default": 1.0,
+            "description": "Strength of relationship."
+          }
+        }
+      },
+      "Meta": {                                                                                                         
+        "type": "object",
+        "required": ["version", "generated"],                                                                           
+        "additionalProperties": true,
+        "properties": {
+          "version": {
+            "type": "string",
+            "const": "1.0",
+            "description": "Spec version."                                                                              
+          },
+          "generated": {                                                                                                
+            "type": "string",
+            "description": "ISO 8601 date/time when this file was generated."
+          },                                                                                                            
+          "generator": {
+            "type": "string",                                                                                           
+            "description": "Tool or system that produced this file."
+          },                                                                                                            
+          "total_nodes": {
+            "type": "integer",                                                                                          
+            "minimum": 1,
+            "description": "Count of nodes in knowledge array."                                                         
+          },
+          "avg_freshness": {                                                                                            
+            "type": "number",
+            "minimum": 0,                                                                                               
+            "maximum": 1,
+            "description": "Mean freshness across all nodes at generation time."                                        
+          },      
+          "stale_count": {
+            "type": "integer",                                                                                          
+            "minimum": 0,
+            "description": "Nodes with freshness below 0.5."                                                            
+          },                                                                                                            
+          "draft": {
+            "type": "boolean",                                                                                          
+            "description": "True if this document has not been verified by the entity owner."
+          },                                                                                                            
+          "awaiting_verification": {
+            "type": "boolean",                                                                                          
+            "description": "True if this document was AI-generated and awaits entity verification."
+          },                                                                                                            
+          "audit": {
+            "type": "object",                                                                                           
+            "properties": {                                                                                             
+              "date": { "type": "string" },
+              "by": { "type": "string" },                                                                               
+              "scope": { "type": "string" },
+              "notes": { "type": "string" }                                                                             
+            }
+          },                                                                                                            
+          "signature": {
+            "type": "object",
+            "properties": {
+              "algorithm": { "type": "string" },
+              "public_key": { "type": "string" },
+              "value": { "type": "string" }                                                                             
+            }
+          }                                                                                                             
+        }         
+      }
+    }
+  }

@@ -1,0 +1,145 @@
+{
+  "$schema": "https://kosprotocol.dev/v1/schema.json",
+  "entity": {
+    "name": "KOS Protocol",
+    "type": "Organization",
+    "id": "kos:kos-protocol",
+    "url": "https://kosprotocol.dev",
+    "description": "Open protocol for publishing machine-readable, provenance-tracked knowledge about any entity."
+  },
+  "knowledge": [
+    {
+      "id": "kos:protocol-spec",
+      "type": "concept",
+      "label": "KOS Protocol Specification",
+      "description": "An open standard defining how entities publish structured knowledge with typed relationships and provenance tracking in a single JSON file at /.well-known/kos.json.",
+      "provenance": {
+        "created": "2026-04-04",
+        "verified": "2026-04-04",
+        "source": "owner",
+        "method": "manual-review",
+        "confidence": 0.95
+      },
+      "relations": [
+        { "target": "kos:provenance-model", "type": "dep", "label": "Core innovation" },
+        { "target": "kos:freshness-decay", "type": "dep", "label": "Trust computation method" }
+      ],
+      "tags": ["protocol", "specification", "open-standard"]
+    },
+    {
+      "id": "kos:provenance-model",
+      "type": "concept",
+      "label": "Provenance Model",
+      "description": "Every node in a kos.json file carries metadata about when it was created, when it was last verified by a human, who provided the information, and how it was verified. This enables machines to compute trust without external lookups.",
+      "provenance": {
+        "created": "2026-04-04",
+        "verified": "2026-04-04",
+        "source": "owner",
+        "method": "manual-review",
+        "confidence": 0.95
+      },
+      "tags": ["provenance", "trust", "verification"]
+    },
+    {
+      "id": "kos:freshness-decay",
+      "type": "concept",
+      "label": "Freshness Decay Function",
+      "description": "A mathematical model quantifying data reliability over time using exponential decay: f = e^(-lambda x days). Different node types decay at different rates, giving machines a computable trust signal for every piece of knowledge.",
+      "provenance": {
+        "created": "2026-04-04",
+        "verified": "2026-04-04",
+        "source": "owner",
+        "method": "manual-review",
+        "confidence": 0.95
+      },
+      "relations": [
+        { "target": "kos:provenance-model", "type": "dep", "label": "Requires provenance dates" }
+      ],
+      "tags": ["freshness", "decay", "trust-computation"]
+    },
+    {
+      "id": "kos:validator",
+      "type": "asset",
+      "label": "KOS Structure Checker",
+      "description": "A browser-based diagnostic tool that checks kos.json files for structural correctness, provenance completeness, referential integrity, and computes real-time freshness decay scores. Not a full schema validator — use the JSON Schema with AJV for complete validation.",
+      "provenance": {
+        "created": "2026-04-04",
+        "verified": "2026-04-04",
+        "source": "owner",
+        "method": "manual-review",
+        "confidence": 0.95
+      },
+      "properties": {
+        "url": "https://kosprotocol.dev",
+        "platform": "Web Browser",
+        "cost": "Free"
+      },
+      "relations": [
+        { "target": "kos:protocol-spec", "type": "dep", "label": "Validates against spec" }
+      ],
+      "tags": ["tool", "validator", "free"]
+    },
+    {
+      "id": "kos:typed-relationships",
+      "type": "concept",
+      "label": "Typed Relationships",
+      "description": "Three relationship types connect nodes: dep (dependency — target must be true for source to hold), ref (reference — informational connection), and rel (semantic — bidirectional relatedness). Cross-entity references link knowledge graphs across domains.",
+      "provenance": {
+        "created": "2026-04-04",
+        "verified": "2026-04-04",
+        "source": "owner",
+        "method": "manual-review",
+        "confidence": 0.95
+      },
+      "relations": [
+        { "target": "kos:protocol-spec", "type": "ref" }
+      ],
+      "tags": ["relationships", "graph", "semantics"]
+    },
+    {
+      "id": "kos:niseus",
+      "type": "entity",
+      "label": "Niseus Authority Systems",
+      "description": "Creator and maintainer of the KOS Protocol. Digital infrastructure agency specializing in authority-based visibility systems.",
+      "provenance": {
+        "created": "2026-04-04",
+        "verified": "2026-04-04",
+        "source": "owner",
+        "method": "self-reported",
+        "confidence": 0.85
+      },
+      "properties": {
+        "url": "https://niseus.com"
+      },
+      "relations": [
+        { "target": "kos:protocol-spec", "type": "rel", "label": "Created and maintains" },
+        { "target": "kos:validator", "type": "rel", "label": "Built and maintains" }
+      ],
+      "tags": ["creator", "maintainer"]
+    }
+  ],
+  "relations": [
+    {
+      "source": "kos:protocol-spec",
+      "target": "kos:niseus",
+      "type": "dep",
+      "label": "Created by Niseus Authority Systems"
+    }
+  ],
+  "meta": {
+    "version": "1.0",
+    "generated": "2026-04-04T10:00:00Z",
+    "generator": "manual/1.0",
+    "draft": false,
+    "total_nodes": 6,
+    "avg_freshness": 1.0,
+    "stale_count": 0,
+    "audit": {
+      "date": "2026-04-04",
+      "by": "owner",
+      "scope": "full",
+      "notes": "Initial publication of KOS Protocol self-description."
+    },
+    "license": "Copyright (c) 2026 Niseus Authority Systems. Open specification. Attribution required. See kosprotocol.dev/LICENSE"
+  }
+}

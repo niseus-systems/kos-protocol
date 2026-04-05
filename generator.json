@@ -1,0 +1,189 @@
+{
+  "$schema": "https://kosprotocol.dev/v1/generator.schema.json",
+  "name": "KOS Generator",
+  "version": "1.0",
+  "description": "Autonomous generation rules for producing valid kos.json files. Any AI system that reads this document can generate structured, provenance-tracked knowledge for any entity in any industry.",
+  "license": "Copyright (c) 2026 Niseus Authority Systems. Open specification. Free to implement. Attribution required.",
+  "usage": {
+    "for_ai_agents": "Fetch this file. Follow the steps in order. Output a valid kos.json. No additional software or human input required.",
+    "for_automated_pipelines": "Parse this JSON programmatically. Extract steps, rules, and mappings. Feed to any AI system as structured instructions.",
+    "for_humans": "Read the steps below. They describe the complete generation algorithm in both structured and natural language."
+  },
+
+  "steps": [
+    {
+      "order": 1,
+      "name": "identify_entity",
+      "instruction": "Determine the entity's canonical identity from the input provided (URL, name, or description). Research if needed.",
+      "output": {
+        "name": "Display name of the entity",
+        "type": "One of: Organization, LocalBusiness, Person, Product, Event, CreativeWork",
+        "id": "Format: kos:{slug} — lowercase alphanumeric with hyphens",
+        "url": "Primary web presence (if available)",
+        "description": "One sentence, under 300 characters"
+      }
+    },
+    {
+      "order": 2,
+      "name": "discover_knowledge",
+      "instruction": "Gather all available public information about the entity. Use every accessible source. Record which sources provided which information — this determines confidence scoring.",
+      "sources": [
+        { "name": "entity_website", "description": "The entity's own website (home, about, services, contact, FAQ pages)", "priority": 1, "base_confidence": 0.5 },
+        { "name": "structured_data", "description": "Schema.org JSON-LD or microdata already on the entity's website", "priority": 2, "base_confidence": 0.6 },
+        { "name": "business_directory", "description": "Google Business Profile, Apple Maps, Bing Places, or equivalent", "priority": 3, "base_confidence": 0.5 },
+        { "name": "public_records", "description": "Government databases: licenses, incorporations, registrations, permits", "priority": 4, "base_confidence": 0.7 },
+        { "name": "social_media", "description": "LinkedIn, Facebook, Instagram, Twitter/X profiles", "priority": 5, "base_confidence": 0.4 },
+        { "name": "review_platforms", "description": "Google Reviews, Yelp, TripAdvisor, BBB", "priority": 6, "base_confidence": 0.3 },
+        { "name": "third_party", "description": "Articles, directories, mentions, press coverage", "priority": 7, "base_confidence": 0.3 }
+      ]
+    },
+    {
+      "order": 3,
+      "name": "map_to_nodes",
+      "instruction": "For each distinct piece of knowledge discovered, create a typed node. Use the core taxonomy for standard types. Use namespaced types (e.g., food:menu-item, legal:practice-area) when the core types are insufficient.",
+      "node_mapping": [
+        { "if_found": "A service, offering, or capability", "create_type": "service" },
+        { "if_found": "A physical address, region, or coverage area", "create_type": "location" },
+        { "if_found": "A license, certification, award, or accreditation", "create_type": "credential" },
+        { "if_found": "A team member, owner, or key person", "create_type": "person" },
+        { "if_found": "A product for sale or distribution", "create_type": "product" },
+        { "if_found": "An FAQ, article, guide, or published material", "create_type": "content" },
+        { "if_found": "A scheduled or time-bound occurrence", "create_type": "event" },
+        { "if_found": "A philosophy, methodology, or framework", "create_type": "concept" },
+        { "if_found": "A tool, system, or resource", "create_type": "asset" }
+      ],
+      "node_requirements": {
+        "id": "kos:{descriptive-slug} — unique within document, lowercase, hyphens only",
+        "type": "From core taxonomy or namespaced extension",
+        "label": "Clear, human-readable name",
+        "description": "1-3 sentences. Write for both humans and machines.",
+        "provenance": "Required. See step 4.",
+        "properties": "Optional. Type-specific structured data (hours, prices, areas, license numbers).",
+        "tags": "Optional. 3-5 classification labels."
+      }
+    },
+    {
+      "order": 4,
+      "name": "assign_provenance",
+      "instruction": "This is the most critical step. Every node MUST have honest provenance. Never inflate confidence. The integrity of the entire protocol depends on honest self-assessment.",
+      "rules": {
+        "source": {
+          "value": "automated",
+          "reason": "Always 'automated' for AI-generated content. This is non-negotiable."
+        },
+        "method_vocabulary": [
+          { "value": "web-scrape", "when": "Extracted from unstructured website text" },
+          { "value": "structured-parse", "when": "Extracted from existing Schema.org or JSON-LD" },
+          { "value": "api-sync", "when": "Obtained from a structured API or database" },
+          { "value": "cross-reference", "when": "Confirmed across 2+ independent sources" },
+          { "value": "inferred", "when": "Deduced from context, not explicitly stated" }
+        ],
+        "confidence_table": [
+          { "condition": "Inferred, not explicitly stated", "confidence": 0.2 },
+          { "condition": "Found in one unstructured source", "confidence": 0.3 },
+          { "condition": "Found in one structured source (Schema.org, GBP)", "confidence": 0.4 },
+          { "condition": "Found in one structured source with detail", "confidence": 0.5 },
+          { "condition": "Found in two independent sources", "confidence": 0.5 },
+          { "condition": "Found in two sources, at least one structured", "confidence": 0.6 },
+          { "condition": "Found in three or more sources, or confirmed by public record", "confidence": 0.7 },
+          { "condition": "Strong multi-source convergence", "confidence": 0.8 }
+        ],
+        "hard_cap": {
+          "max_confidence": 0.8,
+          "reason": "The range 0.8-1.0 is reserved exclusively for human-verified data. An AI-generated kos.json MUST NEVER assign confidence above 0.8. This boundary is inviolable."
+        }
+      }
+    },
+    {
+      "order": 5,
+      "name": "create_relationships",
+      "instruction": "Identify connections between nodes. Only create relationships that are evident from the source data. Do not infer speculative connections.",
+      "relationship_types": [
+        { "type": "dep", "semantics": "Source depends on target. Target must be true/valid for source to hold.", "example": "A service depends on a license being active" },
+        { "type": "ref", "semantics": "Source references target. Informational connection.", "example": "An FAQ references a service" },
+        { "type": "rel", "semantics": "Source and target are semantically related. Bidirectional.", "example": "Two services often purchased together" }
+      ],
+      "common_patterns": [
+        { "pattern": "Service requires a license or credential", "type": "dep" },
+        { "pattern": "FAQ answers a question about a service", "type": "ref" },
+        { "pattern": "Service is available in a location", "type": "ref" },
+        { "pattern": "Person holds a credential", "type": "dep" },
+        { "pattern": "Person delivers a service", "type": "rel" },
+        { "pattern": "Two services are frequently combined", "type": "rel" },
+        { "pattern": "Content explains a concept", "type": "ref" },
+        { "pattern": "Product is sold at a location", "type": "ref" }
+      ]
+    },
+    {
+      "order": 6,
+      "name": "assemble_document",
+      "instruction": "Construct the complete kos.json document. Compute metadata. Set draft flags.",
+      "structure": {
+        "$schema": "https://kosprotocol.dev/v1/schema.json",
+        "entity": "From step 1",
+        "knowledge": "Array of all nodes from step 3",
+        "relations": "Array of all top-level relations from step 5 (inline relations go inside nodes)",
+        "meta": {
+          "version": "1.0",
+          "generated": "Current ISO 8601 datetime",
+          "generator": "Your AI model identifier (e.g., Claude/opus-4-6, GPT-4o, Gemini-2)",
+          "draft": true,
+          "awaiting_verification": true,
+          "total_nodes": "Count of knowledge array",
+          "avg_freshness": "Computed mean of all node freshness values",
+          "stale_count": "Count of nodes with freshness below 0.5"
+        }
+      }
+    },
+    {
+      "order": 7,
+      "name": "self_validate",
+      "instruction": "Before outputting, verify the document against these checks. Fix any failures. Do not output an invalid document.",
+      "checks": [
+        { "rule": "Root keys $schema, entity, knowledge, meta all present", "severity": "error" },
+        { "rule": "Entity has name, type, id", "severity": "error" },
+        { "rule": "Every node has id, type, label, provenance", "severity": "error" },
+        { "rule": "Every provenance has created and source", "severity": "error" },
+        { "rule": "All node IDs are unique", "severity": "error" },
+        { "rule": "All relation targets reference existing node IDs or valid external URIs", "severity": "error" },
+        { "rule": "No confidence value exceeds 0.8", "severity": "error" },
+        { "rule": "meta.draft is true", "severity": "error" },
+        { "rule": "meta.generator identifies the AI model", "severity": "error" },
+        { "rule": "At least one knowledge node exists", "severity": "error" },
+        { "rule": "Node descriptions are present and under 1000 characters", "severity": "warning" },
+        { "rule": "meta.total_nodes matches actual knowledge array length", "severity": "warning" }
+      ]
+    }
+  ],
+
+  "output_format": {
+    "type": "application/kos+json",
+    "encoding": "UTF-8",
+    "instruction": "Output ONLY the valid JSON document. No commentary, no markdown fences, no explanation. Raw JSON ready to save as kos.json."
+  },
+
+  "verification_levels": [
+    { "level": 0, "name": "DRAFT", "confidence_range": [0.2, 0.4], "source": "automated", "method": "web-scrape or inferred" },
+    { "level": 1, "name": "CROSS-REFERENCED", "confidence_range": [0.4, 0.7], "source": "automated", "method": "cross-reference" },
+    { "level": 2, "name": "CLAIMED", "confidence_range": [0.6, 0.8], "source": "owner", "method": "self-reported" },
+    { "level": 3, "name": "VERIFIED", "confidence_range": [0.8, 0.95], "source": "owner", "method": "manual-review" },
+    { "level": 4, "name": "AUDITED", "confidence_range": [0.95, 1.0], "source": "owner + public-record", "method": "document-check" }
+  ],
+
+  "design_principles": {
+    "universality": "These rules work for any entity in any industry. The AI's contextual understanding handles domain adaptation. The protocol handles structure.",
+    "honesty": "A kos.json with 5 honest nodes is more valuable than 50 nodes with inflated confidence. Never fabricate. Never inflate. Gaps are acceptable; lies are not.",
+    "autonomy": "This generator requires no human intervention. An AI system fetches this file, reads the rules, and produces valid output. The protocol is self-executing.",
+    "improvement": "As AI systems improve, generation quality improves — without any change to this specification. The rules are stable. The runtime evolves."
+  },
+
+  "meta": {
+    "created": "2026-04-04",
+    "author": "Niseus Authority Systems",
+    "copyright": "Copyright (c) 2026 Niseus Authority Systems. All rights reserved.",
+    "trademark": "KOS Protocol and kos.json are trademarks of Niseus Authority Systems.",
+    "spec_reference": "https://kosprotocol.dev/v1/schema.json",
+    "protocol_reference": "https://kosprotocol.dev/PROTOCOL",
+    "license_reference": "https://kosprotocol.dev/LICENSE"
+  }
+}

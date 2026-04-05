@@ -1,0 +1,73 @@
+KOS Protocol — License
+
+Copyright (c) 2026 Niseus Authority Systems (niseus.com)
+All rights reserved.
+
+
+SPECIFICATION LICENSE (PROTOCOL.md, GENERATOR.md, generator.json)
+
+The KOS Protocol specification is made available under the following terms:
+
+1. OPEN IMPLEMENTATION. Anyone may create, publish, validate, and consume
+   kos.json files conforming to this specification without license fee or
+   royalty. No permission is required to implement the protocol.
+
+2. REQUIRED ATTRIBUTION. Any publication, tool, service, or documentation
+   that references the KOS Protocol specification MUST include attribution
+   to Niseus Authority Systems as the creator. The following notice is
+   sufficient:
+
+     "KOS Protocol is an open specification created by
+      Niseus Authority Systems (kosprotocol.dev)"
+
+3. NO MODIFICATION OF SPECIFICATION. The specification text (PROTOCOL.md)
+   may be reproduced in whole for reference purposes with attribution, but
+   MUST NOT be modified and republished as "KOS Protocol." Modified versions
+   must use a different name and clearly state they are derived works.
+
+4. TRADEMARK. "KOS Protocol," "kos.json," and the KOS Protocol logo are
+   trademarks of Niseus Authority Systems. Use of these marks to identify
+   conforming implementations is permitted. Use of these marks to imply
+   endorsement, affiliation, or origin from Niseus without written
+   permission is prohibited.
+
+
+CODE LICENSE (index.html, schema files, HTML pages, tooling)
+
+The code, schemas, validator, and tooling in this repository are released
+under the MIT License:
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+
+NO WARRANTY (applies to both specification and code)
+
+THE KOS PROTOCOL SPECIFICATION AND ALL ASSOCIATED SOFTWARE ARE PROVIDED
+"AS IS" WITHOUT WARRANTY OF ANY KIND. NISEUS AUTHORITY SYSTEMS MAKES NO
+WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, ACCURACY, OR
+NON-INFRINGEMENT.
+
+IN NO EVENT SHALL NISEUS AUTHORITY SYSTEMS BE LIABLE FOR ANY CLAIM,
+DAMAGES, OR OTHER LIABILITY ARISING FROM THE USE OF THE SPECIFICATION,
+THE PROTOCOL, OR ANY IMPLEMENTATION THEREOF.
+
+Provenance data published via kos.json is self-reported by the publishing
+entity. Niseus Authority Systems does not verify, endorse, or guarantee
+the accuracy of any kos.json file published by third parties.

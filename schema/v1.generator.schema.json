@@ -1,0 +1,126 @@
+{                                                                                                                     
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://kosprotocol.dev/v1/generator.schema.json",
+    "title": "KOS Generator Schema v1.0",                                                                               
+    "description": "Schema for generator.json — autonomous generation rules for producing valid kos.json files.",       
+    "type": "object",                                                                                                   
+    "required": ["$schema", "name", "version", "steps"],                                                                
+    "additionalProperties": true,                                                                                       
+    "properties": {
+      "$schema": {                                                                                                      
+        "type": "string",
+        "format": "uri",                                                                                                
+        "const": "https://kosprotocol.dev/v1/generator.schema.json"
+      },
+      "name": { "type": "string" },
+      "version": { "type": "string" },                                                                                  
+      "description": { "type": "string" },
+      "license": { "type": "string" },                                                                                  
+      "usage": {  
+        "type": "object",                                                                                               
+        "properties": {
+          "for_ai_agents": { "type": "string" },                                                                        
+          "for_automated_pipelines": { "type": "string" },                                                              
+          "for_humans": { "type": "string" }
+        }                                                                                                               
+      },          
+      "steps": {
+        "type": "array",
+        "minItems": 1,                                                                                                  
+        "items": { "$ref": "#/$defs/Step" }
+      },                                                                                                                
+      "output_format": {
+        "type": "object",                                                                                               
+        "properties": {
+          "type": { "type": "string" },                                                                                 
+          "encoding": { "type": "string" },
+          "instruction": { "type": "string" }                                                                           
+        }
+      },                                                                                                                
+      "verification_levels": {
+        "type": "array",
+        "items": { "$ref": "#/$defs/VerificationLevel" }
+      },                                                                                                                
+      "design_principles": {
+        "type": "object",                                                                                               
+        "additionalProperties": { "type": "string" }
+      },                                                                                                                
+      "meta": {
+        "type": "object",                                                                                               
+        "properties": {
+          "created": { "type": "string" },
+          "author": { "type": "string" },                                                                               
+          "spec_reference": { "type": "string", "format": "uri" },
+          "protocol_reference": { "type": "string", "format": "uri" }                                                   
+        }                                                                                                               
+      }
+    },                                                                                                                  
+    "$defs": {    
+      "Step": {
+        "type": "object",
+        "required": ["order", "name", "instruction"],
+        "properties": {                                                                                                 
+          "order": { "type": "integer", "minimum": 1 },
+          "name": { "type": "string" },                                                                                 
+          "instruction": { "type": "string" },                                                                          
+          "output": { "type": "object", "additionalProperties": true },
+          "sources": {                                                                                                  
+            "type": "array",
+            "items": {                                                                                                  
+              "type": "object",
+              "required": ["name", "priority", "base_confidence"],
+              "properties": {                                                                                           
+                "name": { "type": "string" },
+                "description": { "type": "string" },                                                                    
+                "priority": { "type": "integer" },
+                "base_confidence": { "type": "number", "minimum": 0, "maximum": 1 }                                     
+              }
+            }                                                                                                           
+          },      
+          "node_mapping": {
+            "type": "array",                                                                                            
+            "items": {
+              "type": "object",                                                                                         
+              "required": ["if_found", "create_type"],
+              "properties": {                                                                                           
+                "if_found": { "type": "string" },
+                "create_type": { "type": "string" }                                                                     
+              }   
+            }
+          },
+          "node_requirements": { "type": "object", "additionalProperties": { "type": "string" } },                      
+          "rules": { "type": "object", "additionalProperties": true },
+          "relationship_types": { "type": "array", "items": { "type": "object" } },                                     
+          "common_patterns": { "type": "array", "items": { "type": "object" } },                                        
+          "structure": { "type": "object", "additionalProperties": true },                                              
+          "checks": {                                                                                                   
+            "type": "array",
+            "items": {                                                                                                  
+              "type": "object",
+              "required": ["rule", "severity"],
+              "properties": {                                                                                           
+                "rule": { "type": "string" },
+                "severity": { "type": "string", "enum": ["error", "warning"] }                                          
+              }   
+            }
+          }                                                                                                             
+        }
+      },                                                                                                                
+      "VerificationLevel": {
+        "type": "object",
+        "required": ["level", "name", "confidence_range"],
+        "properties": {                                                                                                 
+          "level": { "type": "integer", "minimum": 0 },
+          "name": { "type": "string" },                                                                                 
+          "confidence_range": {                                                                                         
+            "type": "array",
+            "items": { "type": "number", "minimum": 0, "maximum": 1 },                                                  
+            "minItems": 2,
+            "maxItems": 2                                                                                               
+          },
+          "source": { "type": "string" },                                                                               
+          "method": { "type": "string" }
+        }
+      }
+    }                                                                                                                   
+  }

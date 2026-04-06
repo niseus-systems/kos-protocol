@@ -5,8 +5,11 @@
 KOS is an open protocol for publishing machine-readable, provenance-tracked knowledge about any entity via a single `kos.json` file.
 
 - **Specification:** [kosprotocol.dev/PROTOCOL](https://kosprotocol.dev/PROTOCOL)
-- **Generator:** [kosprotocol.dev/GENERATOR](https://kosprotocol.dev/GENERATOR)
-- **Validator:** [kosprotocol.dev](https://kosprotocol.dev)
+- **Generator:** [kosprotocol.dev/GENERATOR](https://kosprotocol.dev/GENERATOR) — AI reads this → produces valid kos.json
+- **Consumer:** [kosprotocol.dev/CONSUMER](https://kosprotocol.dev/CONSUMER) — AI reads this → knows how to use kos.json
+- **Proof:** [kosprotocol.dev/PROOF](https://kosprotocol.dev/PROOF) — 4/14 vs 14/14 signals comparison
+- **Registry:** [kosprotocol.dev/registry.json](https://kosprotocol.dev/registry.json) — index of live kos.json files
+- **Structure Checker:** [kosprotocol.dev](https://kosprotocol.dev)
 - **JSON Schema:** [kosprotocol.dev/v1/schema.json](https://kosprotocol.dev/v1/schema.json)
 
 ## What it does
@@ -60,6 +63,7 @@ Publish at `yourdomain.com/.well-known/kos.json`. Done.
 ```
 PROTOCOL.md          Full specification (v1.0)
 GENERATOR.md         AI-executable generation instructions
+CONSUMER.md          AI-executable consumption guide (10 steps)
 generator.json       Machine-readable generator
 kos.json             KOS Protocol self-description
 LICENSE              Open spec + MIT code license
@@ -71,6 +75,19 @@ schema/
 ## The 0.8 boundary
 
 AI-generated kos.json files are capped at 0.8 confidence. The range 0.8-1.0 is reserved exclusively for human-verified data. This boundary is inviolable.
+
+## First AI citation — 19 hours
+
+KOS Protocol was cited by Perplexity and Grok (xAI) within 19 hours of publication, with zero marketing or promotion. The protocol did not need marketing. It needed existence. [See the evidence](https://kosprotocol.dev/#the-challenge).
+
+## Live implementations
+
+| Domain | Entity | Nodes |
+|---|---|---|
+| [kosprotocol.dev](https://kosprotocol.dev/.well-known/kos.json) | KOS Protocol | 11 |
+| [niseus.com](https://niseus.com/.well-known/kos.json) | Niseus LLC (creator) | 8 |
+
+Full registry: [kosprotocol.dev/registry.json](https://kosprotocol.dev/registry.json)
 
 ## License
 
